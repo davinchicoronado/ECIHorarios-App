@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head> 
+        <title>ECIHorariosApp</title>
+        <meta charset="UTF-8"> 
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+        <!-- Optional theme -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+        <!-- Latest compiled and minified JavaScript -->  
+        <link rel="stylesheet" href="css/estilos.css">  
+        <link rel="shortcut icon" href="img/favicon.png" id="faviconEci">
+        <script type="text/javascript" src="js/app.js"></script>
+        <script src="js/jquery-3.6.0.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script> 
+
+    </head> 
+    <h1 class="text-center">Eci Horarios</h1> 
+
+    <form class="form-signin" align="center" id="login">    
+
+        <img class="mb-4" src="img/logoeci.png" id="logoLogin"alt="" width="200" height="100">
+        <input type="text" class="form-control" id="InputUsername"  placeholder="Username">      
+        <input type="password" class="form-control" id="InputPassword" placeholder="Password">
+        <button type="submit" class="btn btn-primary" onClick="app.loginUser(InputUsername.value, InputPassword.value)">Submit</button>
+    </form>
+</html>
