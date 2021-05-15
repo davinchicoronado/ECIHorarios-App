@@ -1,0 +1,83 @@
+<html>
+    <head> 
+        <title>ECIHorariosApp</title>
+        <meta charset="UTF-8"> 
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/estilos.css">  
+        <link rel="shortcut icon" href="img/favicon.png" id="faviconEci">
+        <script type="text/javascript" src="js/app.js"></script>
+        <script src="js/jquery-3.6.0.js"></script> 
+        <script src="js/bootstrap/bootstrap.min.js"></script>
+
+
+    </head> 
+    <h1 class="text-center">Eci Horarios</h1>  
+    <div id="Menu"> 
+
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary" >
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#" onClick="app.menu()">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onClick="app.querySubject()">Pre Inscribir</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onClick="app.getSchedules()">Tus Horarios</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onClick="app.exit()" >Salir</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>  
+    </div>    
+    
+    <div id="Inicio"> 
+        <div class="row align-items-start">  
+            <div class="col"> 
+                <img class="mb-4" id="logoIndex" src="img/logo2.jpg" alt="" width="500" height="500"> 
+            </div> 
+            <div class="col"> 
+                <div class="center">
+
+                    <h3 align="center">Descripción</h3> 
+
+
+                    <p>
+                        Esta aplicación fue desarrollada como parte de un proyecto de la asignatura Arquitecturas de Software
+                        de la Escuela Colombiana de Ingeniería Julio Garavito, con el fin de permitirle al estudiante inscribir 
+                        sus materias semestralmente o intersemestral sea el caso.<br>
+                        <br>
+                        El pais requiere ingenieros formados para desempeñarse en proyectos de software que dinamicen
+                        la incorporación de tenologías de información a los sectores productivos y la consolidación de
+                        la industria del software. El área de ingeniería de software, a la cual pertenece este curso,
+                        tiene como propósito desarrollar en los estudiantes las competencias necesarias para participar de 
+                        manera disciplinada y efectiva en proyectos de desarrollo, integración, evolución y evaluación de
+                        software empresarial de calidad. Dado que la arquitectura y el diseño juegan un papel esencial
+                        en el cumplimiento de los requisitos no funcionales, convencionales o especiales de un sistema de
+                        software, es necesario que los estuiantes conozcan y estén preparados para aplicar los fundamentos
+                        y las buenas practicas asociadas a estos dos apectos.
+
+                    </p>
+                </div>
+            </div>
+        </div> 
+
+    </div> 
+    <div id="Preinscribir" style="display: none">
+        preinscribir
+        
+    </div>  
+    <div id="Tushorarios" style="display: none">   
+        TusHorarios
+    </div> 
+    
+        
+
+</html>
