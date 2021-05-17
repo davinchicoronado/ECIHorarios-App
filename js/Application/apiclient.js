@@ -14,8 +14,19 @@ var apiclient = (function () {
                 callback();
             }
         });
-    };
-
+    }; 
+    
+    var getSubjectAvailableStudent = function (student,callback) {
+            $.ajax({
+                url: urlApi + "ecihorarios/availablesubject/" + student.username,
+                type: 'GET',
+                headers: {"Authorization": "Bearer " + JSON.parse(localStorage.getItem("token")).access_token},
+                contentType: "application/json",
+                'success': function (resp) {
+                    callback(student,resp);
+                }
+            });
+        };
     return {
 
         loginUser: function (uname, pword, callback, cberror) {
@@ -61,21 +72,67 @@ var apiclient = (function () {
                 headers: {"Authorization": "Bearer " + JSON.parse(localStorage.getItem("token")).access_token},
                 contentType: "application/json",
                 'success': function (resp) {
-                    callback(idSubject,resp);
+                    callback(idSubject, resp);
                 }
             });
-        }, 
-        saveScheduleStudent : function(subjects,callback){
+        },
+        saveScheduleStudent: function (subjects, callback) {
             $.ajax({
                 url: urlApi + "ecihorarios/saveSchedule/" + localStorage.getItem("username"),
                 type: 'POST',
-                headers: {"Authorization": "Bearer " + JSON.parse(localStorage.getItem("token")).access_token}, 
-                contentType: "application/json", 
+                headers: {"Authorization": "Bearer " + JSON.parse(localStorage.getItem("token")).access_token},
+                contentType: "application/json",
                 data: JSON.stringify(subjects),
                 'success': function (resp) {
                     callback();
                 }
             });
+
+        },
+        enrollSubject: function (subjectGroup, callback) {
+            $.ajax({
+                url: urlApi + "ecihorarios/enrollSubject/" + localStorage.getItem("username"),
+                type: 'PUT',
+                data: JSON.stringify(subjectGroup),
+                headers: {"Authorization": "Bearer " + JSON.parse(localStorage.getItem("token")).access_token},
+                contentType: "application/json",
+                'success': function (resp) {
+                    getDetailsUser(callback);
+                }
+
+            });
+
+
+        },
+
+        deleteSubject: function (subjectGroup, callback) {
+            $.ajax({
+                url: urlApi + "ecihorarios/deleteSubject/" + localStorage.getItem("username"),
+                type: 'DELETE',
+                data: JSON.stringify(subjectGroup),
+                headers: {"Authorization": "Bearer " + JSON.parse(localStorage.getItem("token")).access_token},
+                contentType: "application/json",
+                'success': function (resp) {
+                    getDetailsUser(callback);
+                }
+
+            });
+
+        },
+
+        getDetailsStudent: function(student,callback){
+            $.ajax({
+            url: urlApi + "ecihorarios/user/" + student,
+            type: 'GET',
+            headers: {"Authorization": "Bearer " + JSON.parse(localStorage.getItem("token")).access_token},
+            contentType: "application/json",
+            'success': function (resp) {
+                getSubjectAvailableStudent(resp,callback);                
+            }
+        });
+            
+            
+            
             
         },
         clearSession: function (callback) {

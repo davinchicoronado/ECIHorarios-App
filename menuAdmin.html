@@ -15,7 +15,7 @@
 
 
     </head> 
-    <h1 class="text-center">Eci Horarios</h1>  
+    <h1 class="text-center">Eci Horarios</h1>   
     <div id="Menu"> 
 
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary" >
@@ -25,10 +25,7 @@
                         <a class="nav-link" href="#" onClick="app.menu()">Inicio</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#" onClick="app.querySubject()">Inscribir</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" onClick="app.getSchedule()">Tu Horario</a>
+                        <a class="nav-link" href="#" onClick="app.getDetailsStudent()">Inscribir</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#" onClick="app.exit()" >Salir</a>
@@ -36,8 +33,7 @@
                 </ul>
             </div>
         </nav>  
-    </div>    
-
+    </div>   
     <div id="Inicio"> 
         <div class="row align-items-start">  
             <div class="col"> 
@@ -70,65 +66,64 @@
         </div> 
 
     </div> 
-    <div id="Preinscribir" style="display: none"> 
-        <div class="row align-items-start">  
 
-            <div class="col"> 
-
-                <table class="table table-hover"  id="TableSubject">
-                    <tr>
-                        <th>Codigo</th>
-                        <th>Nombre</th>
-                        <th>Creditos</th>
-                        <th>Nivel</th>
-                    </tr>
-                    <tbody id="tbody">
-                    </tbody>
-                </table>   
-
+    <div id="InscribirAdmin" style="display: none"> 
+        <div class="container" id="mi_tabla">  
+            <div class="row">
+                <div class="col">
+                    <label for="exampleFormControlInput1" class="form-label">Consulta Detalles del Estudiante</label>
+                    <input type="email" class="form-control" id="student" placeholder="student username"> 
+                </div>   
+                <div class="col"> 
+                    <br>
+                    <button type="button" onClick="app.searchStudent(student.value)" class="btn btn-primary">Buscar
+                    </button>
+                </div>   
             </div> 
+            <div class="row align-items-start">
+                <div class="col"> 
 
-            <div class="col"> 
-                <div class="row">
-                    <div class="col">
-                        <h5 id="titleSchedule"></h5>
-                    </div>    
-                    <div class="col">
-                        <h5 id="credits"></h5>
-                    </div> 
+                    <table class="table table-hover"  id="TableSubject">
+                        <tr>
+                            <th>Codigo</th>
+                            <th>Nombre</th>
+                            <th>Creditos</th>
+                            <th>Nivel</th>
+                        </tr>
+                        <tbody id="tbody">
+                        </tbody>
+                    </table>   
+
+                </div> 
+
+                <div class="col"> 
+                    <div class="row">
+                        <div class="col">
+                            <h5 id="titleSchedule"></h5>
+                        </div>    
+                        <div class="col">
+                            <h5 id="credits"></h5>
+                        </div> 
+                    </div>
+                    <table class="table"  id="TableSchedule">
+                        <tr>
+                            <th>Grupo</th>
+                            <th>Profesor</th>
+                            <th>Cupos</th>
+                            <th>Horarios</th>
+                            <th></th>
+                        </tr>
+                        <tbody id="tbody2">
+                        </tbody>
+                    </table>   
+
                 </div>
-                <table class="table"  id="TableSchedule">
-                    <tr>
-                        <th>Grupo</th>
-                        <th>Profesor</th>
-                        <th>Cupos</th>
-                        <th>Horarios</th>
-                        <th></th>
-                    </tr>
-                    <tbody id="tbody2">
-                    </tbody>
-                </table>   
-
             </div>
+        </div>
 
 
-        </div>
-    </div>  
-    <div id="Tushorarios" style="display: none">   
-        <div class="container" id="mi_tabla">
-            
-            <table class="table table-hover"  id="TableScheduleStudent">
-                <tr>
-                    <th>Grupo</th>
-                    <th>Asignatura</th> 
-                    <th>Opción</th>
-                </tr>
-                <tbody id="tbody3">
-                </tbody>
-            </table>  
-        </div>
+
     </div> 
-
 
 
 </html>

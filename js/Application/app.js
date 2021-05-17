@@ -5,8 +5,8 @@ var app = (function () {
     var view = "#Inicio";
     var limitCredits;
     var userdetails;
-    var creditsCurrentSub; 
-    var preenrolledSubjects;
+    var creditsCurrentSub;
+    var enrolledSubjects;
 
     var checkLoginUser = function (uname, password) {
         $.getScript(dirapi, function () {
@@ -18,9 +18,9 @@ var app = (function () {
 
 
     var getAvailableSubject = function () {
-
-        preenrolledSubjects = [];
         userdetails = JSON.parse(localStorage.getItem("userdetails"));
+
+        enrolledSubjects = userdetails.enrolledsubject;
         limitCredits = userdetails.limitCredits;
 
         $.getScript(dirapi, function () {
@@ -28,30 +28,30 @@ var app = (function () {
         });
     };
 
-    var getSchedulesSubjects = function () {  
-        
-        $( "#TableSubject tbody tr" ).on( "click", function() {
-            var currentRow=$(this).closest("tr");
+    var getSchedulesSubjects = function () {
+
+        $("#TableSubject tbody tr").on("click", function () {
+            var currentRow = $(this).closest("tr");
             idSubject = currentRow.find("td:eq(0)").text().trim();
-            nameSchedule = currentRow.find("td:eq(1)").text().trim(); 
-            creditsCurrentSub = parseInt(currentRow.find("td:eq(2)").text().trim()); 
-            
-            
-            
+            nameSchedule = currentRow.find("td:eq(1)").text().trim();
+            creditsCurrentSub = parseInt(currentRow.find("td:eq(2)").text().trim());
+
+
+
             $("#titleSchedule").empty();
-            
-            
-            $("#titleSchedule").html(`${nameSchedule}`); 
-            
-            $.getScript(dirapi,function(){        
-                apiclient.getScheduleSubject(idSubject,cbScheduleSubjects);  
+
+
+            $("#titleSchedule").html(`${nameSchedule}`);
+
+            $.getScript(dirapi, function () {
+                apiclient.getScheduleSubject(idSubject, cbScheduleSubjects);
             });
-            
-         });
-        
-        
-        
-      
+
+        });
+
+
+
+
 
     };
 
@@ -67,73 +67,174 @@ var app = (function () {
             apiclient.clearSession(cbLogOut);
         });
 
- 
-    }; 
-    var preenrollSubject = function(){
-        $( "#TableSchedule" ).on( "click",".btn", function() { 
-            
-            if(limitCredits-creditsCurrentSub<0){
-                //alert("No tienes mas creditos");
-            }
-            else{
-                var currentRow=$(this).closest("tr");
+
+    };
+    var enrollSubject = function () {
+        $("#TableSchedule").on("click", ".btn", function () {
+
+            if (limitCredits - creditsCurrentSub < 0) {
+                alert("No tienes mas creditos");
+            } else {
+                var currentRow = $(this).closest("tr");
 
                 var groupid = currentRow.find("td:eq(0)").text().trim();
-                console.log("veces");
-                limitCredits = limitCredits-creditsCurrentSub;
-                $("#credits").html("Creditos: "+`${limitCredits}`);
+
+                enrolledSubjects.push({group: parseInt(groupid), subjectid: idSubject});
+                $.getScript(dirapi, function () {
+                    apiclient.enrollSubject({group: parseInt(groupid), subjectid: idSubject}, cbenrollSubject);
+                });
 
 
 
-                preenrolledSubjects.push({group:parseInt(groupid),subjectid:idSubject});
 
-                
-                //alert("Materia Agregada"); 
-                $(".btn-primary").attr("disabled", true);
             }
-             
-            
+
+
         });
-        
-        
-    }; 
-    var saveScheduleStudent = function(){
-      if(preenrolledSubjects.length==0){
-            alert("Debes agregar alguna materia"); 
-            
-        }
-        else{
-            $.getScript(dirapi,function(){        
-                apiclient.saveScheduleStudent(preenrolledSubjects,cbsaveSchedule);  
+
+
+    };
+    var saveScheduleStudent = function () {
+        if (enrolledSubjects.length == 0) {
+            alert("Debes agregar alguna materia");
+
+        } else {
+            $.getScript(dirapi, function () {
+                apiclient.saveScheduleStudent(enrolledSubjects, cbsaveSchedule);
             });
-            
+
         }
-        
+
+    };
+
+    var getScheduleStudent = function () {
+
+        $("#tbody3").empty();
+
+        var subjects = JSON.parse(localStorage.getItem("userdetails")).enrolledsubject;
+
+        for (let subject of subjects) {
+
+            $("#tbody3").append(
+                    `
+                      <tr onclick="app.getDetailsGroup()">
+                       <td>${subject.group} </td>
+                       <td>${subject.subjectid}</td> 
+                       <td onClick="app.deleteSubject()"><button class="btn btn-danger">Delete</button></td>
+                      </tr>
+                      `
+                    );
+        }
+
+
+        hideCurrentView();
+        view = "#Tushorarios";
+        showCurrentView();
+
+    };
+
+    var deleteSubjectStudent = function () {
+
+        $("#TableScheduleStudent").on("click", ".btn", function () {
+            var currentRow = $(this).closest("tr");
+
+            var groupid = currentRow.find("td:eq(0)").text().trim();
+            var idSubject = currentRow.find("td:eq(1)").text().trim();
+
+
+            $.getScript(dirapi, function () {
+                apiclient.deleteSubject({group: parseInt(groupid), subjectid: idSubject}, cbdeleteSubject);
+            });
+
+
+        });
+
+    };
+
+    var getDetailsStudent = function () {
+
+        hideCurrentView();
+        view = "#InscribirAdmin";
+        showCurrentView();
+
+
+    };
+    var searchStudent = function (student) {
+
+        $.getScript(dirapi, function () {
+            apiclient.getDetailsStudent(student, cbsearchStudent);
+        });
+
+
+    };
+
+    var cbsearchStudent = function (student, availables) {
+
+
+
+        $("#credits").html("Creditos: " + `${student.limitCredits}`);
+        $("#tbody2").empty();
+        $("#tbody").empty();
+
+        for (let subject of availables) {
+            var flag = true;
+            for (let enrolled of student.enrolledsubject) {
+                if (subject.code == enrolled.subjectid) {
+                    flag = false;
+                }
+
+            }
+            if (flag) {
+                $("#tbody").append(
+                        `
+                      <tr onclick="app.getSchedulesSubjects()">
+                       <td>${subject.code} </td>
+                       <td>${subject.name}</td>
+                       <td>${subject.credits}</td>
+                       <td>${subject.level}</td>
+                      </tr>
+                      `
+                        );
+
+            }
+
+        }
+
+
+
+
     };
 
     var cbLogin = function () {
-        window.location.href = urlApp + "menu.html";
+        userdetails = JSON.parse(localStorage.getItem("userdetails"));
+        if (userdetails.tipo === 'E') {
+            window.location.href = urlApp + "menu.html";
+        } else {
+            window.location.href = urlApp + "menuAdmin.html";
+        }
+
+
     };
 
     var cbLoginError = function (resp) {
         alert("Username or Password incorrect");
 
-    }; 
-    
+    };
+
     var cbLogOut = function () {
         window.location.href = urlApp + "login.html";
     };
-    
-    
-    var cbAvailableSubjects = function(resp){ 
 
-        $("#saveSchedule").hide(); 
-        $("#credits").html("Creditos: "+`${limitCredits}`); 
+
+    var cbAvailableSubjects = function (resp) {
+
+        $("#saveSchedule").hide();
+        $("#credits").html("Creditos: " + `${limitCredits}`);
         $("#tbody2").empty();
-        $("#tbody").empty(); 
-        for(let subject of resp){
+        $("#tbody").empty();
+        for (let subject of resp) {
             $("#tbody").append(
-                  `
+                    `
                       <tr onclick="app.getSchedulesSubjects()">
                        <td>${subject.code} </td>
                        <td>${subject.name}</td>
@@ -142,23 +243,28 @@ var app = (function () {
                       </tr>
                       `
                     );
-            
         }
- 
+
         hideCurrentView();
         view = "#Preinscribir";
         showCurrentView();
     };
- 
-    var cbScheduleSubjects = function(idSchedule, resp){ 
+
+
+
+    var cbScheduleSubjects = function (idSchedule, resp) {
+
+
+        //$("#saveSchedule").show();
+        $("#tbody2").empty();
         
-        
-        $("#saveSchedule").show();
-        $("#tbody2").empty(); 
-        
-        for(let schedule of resp){
+
+
+
+
+        for (let schedule of resp) {
             $("#tbody2").append(
-                   `
+                    `
                    <tr> 
                        <td>${schedule.numGroup} </td>
                        <td>${schedule.teacher}</td>
@@ -175,18 +281,19 @@ var app = (function () {
                             </table>  
             
                        </td>   
-                       <td onClick="app.preenrollSubject()"><button class="btn btn-primary">Enroll</button></td>
+                       <td onClick="app.enrollSubject()"><button class="btn btn-primary">Enroll</button></td>
                    </tr>
                     `
                     );
-            
-            
         } 
-        isAddSchedule(idSchedule);
-        for(let schedule of resp){ 
-            for(let group of schedule.lessons){
-                
-                $("#"+`${schedule.numGroup}`).append(
+        if(JSON.parse(localStorage.getItem("userdetails")).tipo=='E'){
+            isAddSchedule(idSchedule);
+        }
+        
+        for (let schedule of resp) {
+            for (let group of schedule.lessons) {
+
+                $("#" + `${schedule.numGroup}`).append(
                         `
                         <tr>
                             <td>${group.hour} </td>
@@ -195,42 +302,52 @@ var app = (function () {
                         </tr>
                         `
                         );
-                
             }
         }
-        
-    }; 
-    
-    
-    var cbsaveSchedule = function(){
-            
-            alert("Horario Guardado");
-            
-            hideCurrentView();
-            
-            $("#Inicio").show(); 
-            view = "#Inicio";
-            
-        
+
     };
-    
-    
-    
-    var isAddSchedule = function(idSch){
-        if(!(preenrolledSubjects.length==0)){
-            for(let subject of preenrolledSubjects){
-                if(subject.subjectid==idSch){
+
+
+    var cbsaveSchedule = function () {
+
+        alert("Horario Guardado");
+
+        hideCurrentView();
+
+        $("#Inicio").show();
+        view = "#Inicio";
+
+
+    };
+
+    var cbenrollSubject = function () {
+        alert("Materia Agregada");
+        limitCredits = JSON.parse(localStorage.getItem("userdetails")).limitCredits;
+        $("#credits").html("Creditos: " + `${limitCredits}`);
+        $(".btn-primary").attr("disabled", true);
+
+    };
+
+    var cbdeleteSubject = function () {
+        getScheduleStudent();
+
+    };
+
+    var isAddSchedule = function (idSch) {
+        if (!(enrolledSubjects.length == 0)) {
+            for (let subject of enrolledSubjects) {
+                if (subject.subjectid == idSch) {
                     $(".btn-primary").attr("disabled", true);
                 }
             }
-            
+
         }
-        
-    }; 
+
+    };
     var hideCurrentView = function () {
         $(view).hide();
 
-    }; 
+    };
 
     var showCurrentView = function () {
         $(view).show();
@@ -255,24 +372,47 @@ var app = (function () {
             getSchedulesSubjects();
             event.preventDefault();
         },
-        
-        
+
         menu: function () {
             getMenu();
             event.preventDefault();
         },
 
-        preenrollSubject:function(){
-            preenrollSubject();
-            event.preventDefault();  
+        enrollSubject: function () {
+            enrollSubject();
+            event.preventDefault();
         },
-        
-        saveScheduleStudent:function(){
+
+        saveScheduleStudent: function () {
             saveScheduleStudent();
             event.preventDefault();
-            
+
         },
-        
+
+        getSchedule: function () {
+            getScheduleStudent();
+            event.preventDefault();
+        },
+
+        deleteSubject: function () {
+            deleteSubjectStudent();
+            event.preventDefault();
+        },
+        getDetailsGroup: function () {
+            getDetailsGroup();
+            event.preventDefault();
+        },
+
+        getDetailsStudent: function () {
+            getDetailsStudent();
+            event.preventDefault();
+        },
+
+        searchStudent: function (student) {
+            searchStudent(student);
+            event.preventDefault();
+        },
+
         exit: function () {
             logOut();
             event.preventDefault();
