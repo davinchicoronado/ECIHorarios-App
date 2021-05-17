@@ -5,8 +5,11 @@ var app = (function () {
     var view = "#Inicio";
     var limitCredits;
     var userdetails;
+    var studentdetails;
     var creditsCurrentSub;
     var enrolledSubjects;
+    var idSubject;
+    var nameSchedule;
 
     var checkLoginUser = function (uname, password) {
         $.getScript(dirapi, function () {
@@ -94,6 +97,30 @@ var app = (function () {
 
 
     };
+    var enrollSubjectStudent = function () {
+        $("#TableSchedule").on("click", ".btn", function () {
+
+            if (studentdetails.limitCredits - creditsCurrentSub < 0) {
+                alert("El estudiante no tiene mas creditos");
+            } else {
+                var currentRow = $(this).closest("tr");
+
+                var groupid = currentRow.find("td:eq(0)").text().trim();
+                studentdetails.limitCredits = studentdetails.limitCredits-creditsCurrentSub;
+               
+                $.getScript(dirapi, function () {
+                    apiclient.enrollSubjectStudent({group: parseInt(groupid), subjectid: idSubject},studentdetails.username,cbenrollSubjectStudent);
+                });
+
+
+
+
+            }
+
+
+        });
+    };
+
     var saveScheduleStudent = function () {
         if (enrolledSubjects.length == 0) {
             alert("Debes agregar alguna materia");
@@ -171,14 +198,14 @@ var app = (function () {
     var cbsearchStudent = function (student, availables) {
 
 
-
-        $("#credits").html("Creditos: " + `${student.limitCredits}`);
+        studentdetails = student;
+        $("#credits").html("Creditos: " + `${studentdetails.limitCredits}`);
         $("#tbody2").empty();
         $("#tbody").empty();
 
         for (let subject of availables) {
             var flag = true;
-            for (let enrolled of student.enrolledsubject) {
+            for (let enrolled of studentdetails.enrolledsubject) {
                 if (subject.code == enrolled.subjectid) {
                     flag = false;
                 }
@@ -195,13 +222,8 @@ var app = (function () {
                       </tr>
                       `
                         );
-
             }
-
         }
-
-
-
 
     };
 
@@ -257,7 +279,13 @@ var app = (function () {
 
         //$("#saveSchedule").show();
         $("#tbody2").empty();
-        
+        var typepet;
+        if (JSON.parse(localStorage.getItem("userdetails")).tipo == 'E') {
+            var typepet = "app.enrollSubject()";
+        } else {
+            var typepet = "app.enrollSubjectStudent()";
+
+        }
 
 
 
@@ -281,15 +309,15 @@ var app = (function () {
                             </table>  
             
                        </td>   
-                       <td onClick="app.enrollSubject()"><button class="btn btn-primary">Enroll</button></td>
+                       <td onClick=${typepet}><button class="btn btn-primary">Enroll</button></td>
                    </tr>
                     `
                     );
-        } 
-        if(JSON.parse(localStorage.getItem("userdetails")).tipo=='E'){
+        }
+        if (JSON.parse(localStorage.getItem("userdetails")).tipo == 'E') {
             isAddSchedule(idSchedule);
         }
-        
+
         for (let schedule of resp) {
             for (let group of schedule.lessons) {
 
@@ -326,6 +354,12 @@ var app = (function () {
         $("#credits").html("Creditos: " + `${limitCredits}`);
         $(".btn-primary").attr("disabled", true);
 
+    }; 
+    var cbenrollSubjectStudent = function(){
+        alert("Materia Agregada");  
+        $("#credits").html("Creditos: " + `${studentdetails.limitCredits}`); 
+        $(".btn-primary").attr("disabled", true);
+   
     };
 
     var cbdeleteSubject = function () {
@@ -380,6 +414,10 @@ var app = (function () {
 
         enrollSubject: function () {
             enrollSubject();
+            event.preventDefault();
+        },
+        enrollSubjectStudent: function () {
+            enrollSubjectStudent();
             event.preventDefault();
         },
 

@@ -130,6 +130,21 @@ var apiclient = (function () {
                 getSubjectAvailableStudent(resp,callback);                
             }
         });
+     
+        }, 
+        enrollSubjectStudent: function(subjectGroup,student,callback){
+            $.ajax({
+                url: urlApi + "ecihorarios/enrollSubjectStudent/" + student,
+                type: 'PUT',
+                data: JSON.stringify(subjectGroup),
+                headers: {"Authorization": "Bearer " + JSON.parse(localStorage.getItem("token")).access_token},
+                contentType: "application/json",
+                'success': function (resp) {
+                    callback();
+                }
+
+            });
+            
             
             
             
