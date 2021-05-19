@@ -1,0 +1,1 @@
+web: ECIHorarios/bin/heroku-php-apache2 ./

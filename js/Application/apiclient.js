@@ -1,7 +1,7 @@
 var apiclient = (function () {
     var client_secret = 'YXBpY2xpZW50OmNsaWVudDEyMw==';
-    var urlApi = "http://localhost:8080/";
-   
+    var urlApi = "https://ecihorarios.herokuapp.com/";
+
 
 
     var getDetailsUser = function (callback) {
@@ -102,7 +102,12 @@ var apiclient = (function () {
                     getDetailsUser(callback);
                 }
 
-            });
+            }).fail(
+                    function (jqXHR, textStatus, errorThrown) {
+                        if (jqXHR.status === 403) {
+                            alert('No hay cupos');
+                        }
+                    });
 
         },
 
