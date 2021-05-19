@@ -1,6 +1,6 @@
 var apiclient = (function () {
     var client_secret = 'YXBpY2xpZW50OmNsaWVudDEyMw==';
-    var urlApi = "https://ecihorarios.herokuapp.com/";
+    var urlApi = "http://localhost:8080/";
 
 
 

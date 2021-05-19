@@ -1,8 +1,8 @@
 var app = (function () {
 
     var dirapi = "js/Application/apiclient.js";
-    var urlApp = "https://ecihorariosapp.herokuapp.com/";
-    var urlApi = "https://ecihorarios.herokuapp.com/";
+    var urlApp = "http://localhost/ECIHorarios/";
+    var urlApi = "http://localhost:8080/";
     var view = "#Inicio";
     var limitCredits;
     var userdetails;
