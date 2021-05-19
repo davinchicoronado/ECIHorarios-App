@@ -2,6 +2,7 @@ var app = (function () {
 
     var dirapi = "js/Application/apiclient.js";
     var urlApp = "http://localhost/ECIHorarios/";
+    var urlApi = "http://localhost:8080/";
     var view = "#Inicio";
     var limitCredits;
     var userdetails;
@@ -10,6 +11,7 @@ var app = (function () {
     var enrolledSubjects;
     var idSubject;
     var nameSchedule;
+    var stompClient = null;
 
     var checkLoginUser = function (uname, password) {
         $.getScript(dirapi, function () {
@@ -17,7 +19,6 @@ var app = (function () {
         });
 
     };
-
 
 
     var getAvailableSubject = function () {
@@ -52,10 +53,6 @@ var app = (function () {
 
         });
 
-
-
-
-
     };
 
     var getMenu = function () {
@@ -87,11 +84,7 @@ var app = (function () {
                     apiclient.enrollSubject({group: parseInt(groupid), subjectid: idSubject}, cbenrollSubject);
                 });
 
-
-
-
             }
-
 
         });
 
@@ -106,57 +99,30 @@ var app = (function () {
                 var currentRow = $(this).closest("tr");
 
                 var groupid = currentRow.find("td:eq(0)").text().trim();
-                studentdetails.limitCredits = studentdetails.limitCredits-creditsCurrentSub;
-               
+                studentdetails.limitCredits = studentdetails.limitCredits - creditsCurrentSub;
+
                 $.getScript(dirapi, function () {
-                    apiclient.enrollSubjectStudent({group: parseInt(groupid), subjectid: idSubject},studentdetails.username,cbenrollSubjectStudent);
+                    apiclient.enrollSubjectStudent({group: parseInt(groupid), subjectid: idSubject}, studentdetails.username, cbenrollSubjectStudent);
                 });
-
-
-
-
             }
-
-
         });
     };
 
     var saveScheduleStudent = function () {
         if (enrolledSubjects.length == 0) {
             alert("Debes agregar alguna materia");
-
         } else {
             $.getScript(dirapi, function () {
                 apiclient.saveScheduleStudent(enrolledSubjects, cbsaveSchedule);
             });
-
         }
-
     };
 
     var getScheduleStudent = function () {
 
-        $("#tbody3").empty();
-
-        var subjects = JSON.parse(localStorage.getItem("userdetails")).enrolledsubject;
-
-        for (let subject of subjects) {
-
-            $("#tbody3").append(
-                    `
-                      <tr onclick="app.getDetailsGroup()">
-                       <td>${subject.group} </td>
-                       <td>${subject.subjectid}</td> 
-                       <td onClick="app.deleteSubject()"><button class="btn btn-danger">Delete</button></td>
-                      </tr>
-                      `
-                    );
-        }
-
-
-        hideCurrentView();
-        view = "#Tushorarios";
-        showCurrentView();
+        $.getScript(dirapi, function () {
+            apiclient.getDetailsUser(cbgetScheduleStudent);
+        });
 
     };
 
@@ -173,7 +139,6 @@ var app = (function () {
                 apiclient.deleteSubject({group: parseInt(groupid), subjectid: idSubject}, cbdeleteSubject);
             });
 
-
         });
 
     };
@@ -184,7 +149,6 @@ var app = (function () {
         view = "#InscribirAdmin";
         showCurrentView();
 
-
     };
     var searchStudent = function (student) {
 
@@ -192,11 +156,28 @@ var app = (function () {
             apiclient.getDetailsStudent(student, cbsearchStudent);
         });
 
+    };
+
+    var messageChat = function () {
+        connectWebSocket(cbmessageChat);
+
+    };
+
+    var sendMessage = function (message) {
+        stompClient.send("/app/chat", {},
+                JSON.stringify({'username': localStorage.getItem("username"), 'text': message}));
+
+    };
+
+    var cbmessageChat = function () {
+
+        hideCurrentView();
+        view = "#Chat";
+        showCurrentView();
 
     };
 
     var cbsearchStudent = function (student, availables) {
-
 
         studentdetails = student;
         $("#credits").html("Creditos: " + `${studentdetails.limitCredits}`);
@@ -209,7 +190,6 @@ var app = (function () {
                 if (subject.code == enrolled.subjectid) {
                     flag = false;
                 }
-
             }
             if (flag) {
                 $("#tbody").append(
@@ -240,6 +220,33 @@ var app = (function () {
 
     var cbLoginError = function (resp) {
         alert("Username or Password incorrect");
+
+    };
+
+    var cbgetScheduleStudent = function () {
+
+        $("#tbody3").empty();
+
+        var subjects = JSON.parse(localStorage.getItem("userdetails")).enrolledsubject;
+
+        for (let subject of subjects) {
+
+            $("#tbody3").append(
+                    `
+                      <tr onclick="app.getDetailsGroup()">
+                       <td>${subject.group} </td>
+                       <td>${subject.subjectid}</td> 
+                       <td onClick="app.deleteSubject()"><button class="btn btn-danger">Delete</button></td>
+                      </tr>
+                      `
+                    );
+        }
+
+
+        hideCurrentView();
+        view = "#Tushorarios";
+        showCurrentView();
+
 
     };
 
@@ -286,9 +293,6 @@ var app = (function () {
             var typepet = "app.enrollSubjectStudent()";
 
         }
-
-
-
 
         for (let schedule of resp) {
             $("#tbody2").append(
@@ -354,12 +358,12 @@ var app = (function () {
         $("#credits").html("Creditos: " + `${limitCredits}`);
         $(".btn-primary").attr("disabled", true);
 
-    }; 
-    var cbenrollSubjectStudent = function(){
-        alert("Materia Agregada");  
-        $("#credits").html("Creditos: " + `${studentdetails.limitCredits}`); 
+    };
+    var cbenrollSubjectStudent = function () {
+        alert("Materia Agregada");
+        $("#credits").html("Creditos: " + `${studentdetails.limitCredits}`);
         $(".btn-primary").attr("disabled", true);
-   
+
     };
 
     var cbdeleteSubject = function () {
@@ -387,8 +391,30 @@ var app = (function () {
         $(view).show();
     };
 
-
-
+    var connectWebSocket = function (callback) {
+        var socket = new SockJS(urlApi + 'chat');
+        stompClient = Stomp.over(socket);
+        stompClient.connect({}, function (frame) {
+            console.log('Connected: ' + frame);
+            stompClient.subscribe('/topic/messages', function (messageOutput) {
+                showMessageOutput(JSON.parse(messageOutput.body));
+            });
+        });
+        callback();
+    };
+    var showMessageOutput = function (messageOutput) { 
+        console.log(messageOutput.username); 
+        console.log(messageOutput.text);
+        $("#messageArea").append(
+                        `
+                        <li class="chat-message"> 
+                            <i style="background-color: rgb(255,193,7)">${messageOutput.username.charAt(0)}</i>
+                            <span>${messageOutput.username}<span>
+                            <p>${messageOutput.text}</p>
+                        </li>
+                        `                            
+                );
+    };
 
 
     return{
@@ -451,6 +477,16 @@ var app = (function () {
             event.preventDefault();
         },
 
+        viewChat: function () {
+            messageChat();
+            event.preventDefault();
+        },
+
+        sendMessage: function (message) {
+            sendMessage(message);
+            event.preventDefault();
+        },
+
         exit: function () {
             logOut();
             event.preventDefault();
@@ -458,7 +494,5 @@ var app = (function () {
 
 
     };
-
-
 
 })();

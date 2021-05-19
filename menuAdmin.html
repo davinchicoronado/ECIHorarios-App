@@ -7,11 +7,14 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
 
         <link rel="stylesheet" href="css/bootstrap.min.css">
-        <link rel="stylesheet" href="css/estilos.css">  
+        <link rel="stylesheet" href="css/estilos.css">   
+        <link rel="stylesheet" href="css/main.css">
         <link rel="shortcut icon" href="img/favicon.png" id="faviconEci">
         <script type="text/javascript" src="js/Application/app.js"></script>
         <script src="js/jquery/jquery-3.6.0.js"></script> 
-        <script src="js/bootstrap/bootstrap.min.js"></script>
+        <script src="js/bootstrap/bootstrap.min.js"></script> 
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 
 
     </head> 
@@ -26,6 +29,9 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#" onClick="app.getDetailsStudent()">Inscribir</a>
+                    </li> 
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onClick="app.viewChat()">Chat</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#" onClick="app.exit()" >Salir</a>
@@ -123,7 +129,28 @@
 
 
 
-    </div> 
+    </div>  
+
+    <div id="Chat" style="display: none">
+        <div id="chat-page">
+            <div class="chat-container">
+                <div class="chat-header">
+                    <h2>Charla con los estudiantes</h2>
+                </div>
+                <ul id="messageArea"> 
+                </ul>
+                <form id="messageForm" name="messageForm" nameForm="messageForm">
+                    <div class="form-group">
+                        <div class="input-group clearfix">
+                            <input type="text" id="inputmessage" placeholder="Type a message..."
+                                   autocomplete="off" class="form-control" />
+                            <button type="submit" class="btn btn-success" onClick="app.sendMessage(inputmessage.value)" >Enviar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
 
 </html>
