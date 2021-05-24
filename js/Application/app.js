@@ -1,8 +1,17 @@
 var app = (function () {
-
-    var dirapi = "js/Application/apiclient.js";
+    
+    /**
+    var urlApp = "http://localhost/ECIHorarios/";
+    var urlApi = "http://localhost:8080/";
+    **/ 
+   
     var urlApp = "https://ecihorariosapp.herokuapp.com/";
-    var urlApi = "https://ecihorarios.herokuapp.com/";
+    var urlApi = "https://ecihorarios.herokuapp.com/";  
+    
+    var dirapi = "js/Application/apiclient.js";  
+    
+
+    
     var view = "#Inicio";
     var limitCredits;
     var userdetails;
@@ -40,11 +49,10 @@ var app = (function () {
             nameSchedule = currentRow.find("td:eq(1)").text().trim();
             creditsCurrentSub = parseInt(currentRow.find("td:eq(2)").text().trim());
 
-
-
+            
             $("#titleSchedule").empty();
 
-
+            
             $("#titleSchedule").html(`${nameSchedule}`);
 
             $.getScript(dirapi, function () {
@@ -335,7 +343,8 @@ var app = (function () {
                         `
                         );
             }
-        }
+        } 
+        $("#TableSubject tbody tr").off("click");
 
     };
 
