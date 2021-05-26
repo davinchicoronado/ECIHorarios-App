@@ -50,4 +50,7 @@ Pero esto podría llegar a ser muy costoso, si se realizan muchas peticiones par
 Para lograr esto se utiliza  la herramienta llamada Apache JMeter que nos facilitara realizar un conjunto de  peticiones. Y se dispondrá de un endpoint para consultar los planes de estudios. Teniendo los siguientes resultados. 
 
 Resultados para el escenario 1
-![](imgr/sincache.png)
+![](imgr/sincache.png) 
+
+Resultados para el escenario 2 
+![](imgr/concache.png)
