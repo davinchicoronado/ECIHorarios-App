@@ -83,7 +83,14 @@ Para el atributo no funcional Seguridad se implemento el protocolo OAuth2 que co
 ![](imgr/oauth2recursos.png) 
 
 Para el primer escenario se inscribirá una asignatura teniendo los siguientes resultados.
+![](imgr/sinoauth.png) 
 
+Esto no deberia ocurrir ya que solo los estudiantes de la Escuela y los administradores pueden inscribir asignaturas. 
+
+Para el segundo escenario se inscribirá una asignatura luego de loguearse teniendo los siguientes resultados. 
+![](imgr/conoauth.png) 
+
+Esto es correcto ya que el usuario que se logueo tiene rol de Estudiante y no tiene permisos para usar el endpoint.
 
 
 
