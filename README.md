@@ -76,6 +76,9 @@ Se puede ver que la reducción en tiempo fue bastante, para el primer escenario 
 * 
 ### Descripción 
 Para el atributo no funcional Seguridad se implemento el protocolo OAuth2 que consiste en delegar la autenticación de usuario al servicio que gestiona las cuentas, de modo que sea éste quien otorgue el acceso para las aplicaciones de terceros. OAuth 2 provee un flujo de autorización para aplicaciones web, aplicaciones móviles e incluso programas de escritorio. Este servicio también se encargar de administrar los recursos de una api permitiendole a distintintos roles usar determinados recursos. 
-* ![](imgr/protocolooauth.png) 
-* ![](imgr/oauth2recursos.png)
+* Esquema  
+![](imgr/protocolooauth.png)  
+
+* Recursos 
+![](imgr/oauth2recursos.png)
 
