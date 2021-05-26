@@ -102,5 +102,5 @@ Esto es correcto ya que el usuario que se logueo tiene rol de Estudiante y no ti
 * **Medida de Respuesta** : Estadisticas. 
 
 ### Descripción 
-MongoDB ofrece una configuración para implementar escalabilidad horizontal y esto lo realiza con algo que se llama clúster fragmentado que es una colección de datos distribuidos entre muchas servidores.
+MongoDB ofrece una configuración para implementar escalabilidad horizontal y esto lo realiza con algo que se llama clúster fragmentado que es una colección de datos distribuidos entre muchas servidores. Para este item se implemento esta configuración.
 
