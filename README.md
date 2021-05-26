@@ -45,5 +45,6 @@ Una de las funcionalidades más importantes es la de consultar asignaturas dispo
       			
 			...
       			...
-```
+``` 
+Pero esto podría llegar a ser muy costoso, si se realizan muchas peticiones para consultar las asignaturas disponibles, el proceso de mapeo de los planes de estudios y requerirlos a la base de datos es muy largo en términos  de peticiones concurrentemente, agregando que los planes de estudios tienen bastante información que almacenar. Por esta razón se implementa un cache en la api para que  no se realice todo este proceso si no este se memorice, también se implementa un cache para almacenar la información de las distintas asignaturas.
 
