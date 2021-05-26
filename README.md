@@ -54,3 +54,4 @@ Resultados para el escenario 1
 
 Resultados para el escenario 2 
 ![](imgr/concache.png)
+Se puede ver que la reducción en tiempo fue bastante, para el primer escenario se obtuvo 4 segundos y para el segundo 1 segundo, además  para el tiempo entre cada petición disminuyo significativamente. Para obtener estos resultados se realizaron 400 peticiones a la api. 
