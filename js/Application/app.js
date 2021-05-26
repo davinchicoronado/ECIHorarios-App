@@ -86,7 +86,9 @@ var app = (function () {
                 var currentRow = $(this).closest("tr");
 
                 var groupid = currentRow.find("td:eq(0)").text().trim();
-
+ 
+                
+                
                 enrolledSubjects.push({group: parseInt(groupid), subjectid: idSubject});
                 $.getScript(dirapi, function () {
                     apiclient.enrollSubject({group: parseInt(groupid), subjectid: idSubject}, cbenrollSubject);
@@ -141,8 +143,7 @@ var app = (function () {
 
             var groupid = currentRow.find("td:eq(0)").text().trim();
             var idSubject = currentRow.find("td:eq(1)").text().trim();
-
-
+            
             $.getScript(dirapi, function () {
                 apiclient.deleteSubject({group: parseInt(groupid), subjectid: idSubject}, cbdeleteSubject);
             });
@@ -175,6 +176,10 @@ var app = (function () {
         stompClient.send("/app/chat", {},
                 JSON.stringify({'username': localStorage.getItem("username"), 'text': message}));
 
+    }; 
+    
+    var getDetailsGroup = function(){
+        console.log("none");
     };
 
     var cbmessageChat = function () {
@@ -364,18 +369,21 @@ var app = (function () {
     var cbenrollSubject = function () {
         alert("Materia Agregada");
         limitCredits = JSON.parse(localStorage.getItem("userdetails")).limitCredits;
-        $("#credits").html("Creditos: " + `${limitCredits}`);
-        $(".btn-primary").attr("disabled", true);
+        $("#credits").html("Creditos: " + `${limitCredits}`); 
+        $(".btn-primary").attr("disabled", true); 
+        $("#TableSchedule").off("click");
 
     };
     var cbenrollSubjectStudent = function () {
         alert("Materia Agregada");
         $("#credits").html("Creditos: " + `${studentdetails.limitCredits}`);
-        $(".btn-primary").attr("disabled", true);
+        $(".btn-primary").attr("disabled", true); 
+        
 
     };
 
-    var cbdeleteSubject = function () {
+    var cbdeleteSubject = function () { 
+         $("#TableScheduleStudent").off("click");
         getScheduleStudent();
 
     };
