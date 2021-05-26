@@ -83,8 +83,24 @@ Para el atributo no funcional Seguridad se implemento el protocolo OAuth2 que co
 ![](imgr/oauth2recursos.png) 
 
 Para el primer escenario se inscribirá una asignatura teniendo los siguientes resultados.
+![](imgr/sinoauth.png) 
 
+Esto no deberia ocurrir ya que solo los estudiantes de la Escuela y los administradores pueden inscribir asignaturas. 
 
+Para el segundo escenario se inscribirá una asignatura luego de loguearse teniendo los siguientes resultados. 
+![](imgr/conoauth.png) 
 
+Esto es correcto ya que el usuario que se logueo tiene rol de Estudiante y no tiene permisos para usar el endpoint.
 
+## Escalabilidad y Disponibilidad
+### Escenario 1 
+* **Fuente del estímulo** : El usuario final. 
+* **Estimulo**: Realizar varias operaciones desde la App
+* **Ambiente**: Clusters ECIHorarios. 
+* **Artefacto**: ECIHorariosAPP.
+* **Respuesta**: Estadisticas en los diferentes clusters.
+* **Medida de Respuesta** : Estadisticas. 
+
+### Descripción 
+MongoDB ofrece una configuración para implementar escalabilidad horizontal y esto lo realiza con algo que se llama clúster fragmentado que es una colección de datos distribuidos entre muchas servidores. Para este item se implemento esta configuración.
 
