@@ -21,7 +21,7 @@
 Una de las funcionalidades más importantes es la de consultar asignaturas disponibles la cual para poder realizar esto se debe consultar el plan de estudios de la carrera del estudiante, las asignaturas aprobadas del mismo,  y la información de las asignaturas. Gracias a las bases de datos Mongo el plan de estudios es fácil de representar, teniendo así la forma de un grafo.  
 
 ``` 
-    b.Curriculum.insert(
+    db.Curriculum.insert(
 	{ "_id" : "Ingenieria de Sistemas" ,
 	  "list": [ {"code":"OGR1" , 
 			"prerequisites": ["SIML"]
@@ -42,7 +42,8 @@ Una de las funcionalidades más importantes es la de consultar asignaturas dispo
 			{"code":"FDGP",
 				"prerequisites": ["FCFI"]
 			}
-      ...
-      ...
+      			
+			...
+      			...
 ```
 
