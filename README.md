@@ -92,6 +92,14 @@ Para el segundo escenario se inscribirá una asignatura luego de loguearse tenie
 
 Esto es correcto ya que el usuario que se logueo tiene rol de Estudiante y no tiene permisos para usar el endpoint.
 
+## Escalabilidad 
+### Escenario 1 
+* **Fuente del estímulo** : El usuario final. 
+* **Estimulo**: Realizar varias operaciones desde la App
+* **Ambiente**: Clusters ECIHorarios. 
+* **Artefacto**: ECIHorariosAPP.
+* **Respuesta**: Estadisticas en los diferentes clusters.
+* **Medida de Respuesta** : Estadisticas. 
 
 
 
