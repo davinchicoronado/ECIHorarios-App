@@ -54,4 +54,23 @@ Resultados para el escenario 1
 
 Resultados para el escenario 2 
 ![](imgr/concache.png)
-Se puede ver que la reducción en tiempo fue bastante, para el primer escenario se obtuvo 4 segundos y para el segundo 1 segundo, además  para el tiempo entre cada petición disminuyo significativamente. Para obtener estos resultados se realizaron 400 peticiones a la api. 
+Se puede ver que la reducción en tiempo fue bastante, para el primer escenario se obtuvo 4 segundos y para el segundo 1 segundo, además  para el tiempo entre cada petición disminuyo significativamente. Para obtener estos resultados se realizaron 400 peticiones a la api.  
+
+## Seguridad 
+ 
+### Escenario 1 
+* **Fuente del estímulo** : El usuario final. 
+* **Estimulo**: Registrar asignatura
+* **Ambiente**: Sin protocolo OAuth2. 
+* **Artefacto**: ECIHorariosAPI.
+* **Respuesta**: Petición post satisfactoria.
+* **Medida de Respuesta** : Petición http satisfactoria.  
+
+### Escenario 2
+* **Fuente del estímulo** : El usuario final. 
+* **Estimulo**: Registrar asignatura.
+* **Ambiente**: Con protocolo OAuth2. 
+* **Artefacto**: ECIHorariosAPI.
+* **Respuesta**: Petición post denegada.
+* **Medida de Respuesta** : Petición http denegada.
+
