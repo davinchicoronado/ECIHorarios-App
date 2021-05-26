@@ -80,5 +80,11 @@ Para el atributo no funcional Seguridad se implemento el protocolo OAuth2 que co
 ![](imgr/protocolooauth.png)  
 
 * Recursos <br>
-![](imgr/oauth2recursos.png)
+![](imgr/oauth2recursos.png) 
+
+Para el primer escenario se inscribirá una asignatura teniendo los siguientes resultados.
+
+
+
+
 
